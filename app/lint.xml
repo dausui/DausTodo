@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Translation warnings -->
+    <issue id="MissingTranslation" severity="warning" />
+    <issue id="ExtraTranslation" severity="warning" />
+    
+    <!-- Performance -->
+    <issue id="InvalidPackage" severity="ignore" />
+    <issue id="Overdraw" severity="warning" />
+    <issue id="UnusedResources" severity="warning" />
+    
+    <!-- Security -->
+    <issue id="HardcodedDebugMode" severity="error" />
+    <issue id="AllowBackup" severity="warning" />
+    
+    <!-- Accessibility -->
+    <issue id="ContentDescription" severity="warning" />
+    <issue id="TouchTargetSizeCheck" severity="warning" />
+    
+    <!-- Layout -->
+    <issue id="TooManyViews" severity="warning" />
+    <issue id="TooDeepLayout" severity="warning" />
+    <issue id="NestedWeights" severity="warning" />
+    
+    <!-- Kotlin -->
+    <issue id="UseValueOf" severity="warning" />
+    <issue id="ObsoleteSdkInt" severity="warning" />
+    
+    <!-- Custom rules -->
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+    <issue id="GoogleAppIndexingWarning" severity="ignore" />
+</lint>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_note_title"
+            style="@style/TextAppearance.DausNotes.Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Note Title" />
+
+        <TextView
+            android:id="@+id/tv_note_content"
+            style="@style/TextAppearance.DausNotes.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:text="This is the content preview of the note..." />
+
+        <TextView
+            android:id="@+id/tv_note_date"
+            style="@style/TextAppearance.DausNotes.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="2 hours ago" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_favorite"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/content_description_favorite"
+        android:src="@drawable/ic_favorite"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>
