@@ -6,9 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
     - name: Checkout code
@@ -20,6 +24,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
@@ -33,11 +40,23 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - name: Run lint
-      run: ./gradlew lintDebug
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
       
+    - name: Run lint
+      run: ./gradlew lintDebug --continue
+      
+    - name: Upload lint results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: lint-results
+        path: |
+          **/build/reports/lint-results-debug.html
+          **/build/reports/lint-results-debug.xml
+          
     - name: Run unit tests
-      run: ./gradlew testDebugUnitTest
+      run: ./gradlew testDebugUnitTest --continue
       
     - name: Generate test report
       uses: dorny/test-reporter@v1
@@ -46,26 +65,31 @@ jobs:
         name: Unit Test Results
         path: '**/TEST-*.xml'
         reporter: java-junit
+        fail-on-error: true
         
-    - name: Build debug APK
-      run: ./gradlew assembleDebug
-      
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-debug
-        path: app/build/outputs/apk/debug/app-debug.apk
-        
-    - name: Upload lint results
+    - name: Upload test results
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: lint-results
-        path: app/build/reports/lint-results-debug.html
+        name: test-results
+        path: |
+          **/build/reports/tests/
+          **/build/test-results/
+        
+    - name: Build debug APK
+      run: ./gradlew assembleDebug --stacktrace
+      
+    - name: Upload debug APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-debug-${{ github.sha }}
+        path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
 
   instrumented-test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    timeout-minutes: 45
     
     steps:
     - name: Checkout code
@@ -77,6 +101,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+        
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
@@ -90,8 +117,48 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: Enable KVM group perms
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+      
     - name: Run instrumented tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 29
-        script: ./gradlew connectedAndroidTest
+        target: default
+        arch: x86_64
+        profile: Nexus 6
+        script: ./gradlew connectedAndroidTest --stacktrace
+        
+    - name: Upload instrumented test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: instrumented-test-results
+        path: |
+          **/build/reports/androidTests/
+          **/build/outputs/androidTest-results/
+
+  security-scan:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'

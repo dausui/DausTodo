@@ -54,14 +54,15 @@
     
     <!-- Override caption text color for dark theme -->
     <style name="TextAppearance.DausNotes.Caption" parent="TextAppearance.Material3.BodySmall">
-        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/md_theme_dark_onSurfaceVariant</item>
     </style>
     
     <!-- Override timer text color for dark theme -->
     <style name="TextAppearance.DausNotes.Timer" parent="TextAppearance.Material3.DisplayLarge">
-        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">48sp</item>
         <item name="android:textColor">@color/md_theme_dark_primary</item>
     </style>
