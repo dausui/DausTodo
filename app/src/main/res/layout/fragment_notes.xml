@@ -8,14 +8,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
         <!-- Search Bar -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="8dp"
             app:cardElevation="2dp"
             app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,9 +52,8 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:padding="8dp"
-                tools:itemCount="5"
-                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_note" />
+                tools:itemCount="3"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <!-- Empty State -->
@@ -67,23 +67,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                style="@style/TextAppearance.DausNotes.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_notes_found"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                style="@style/TextAppearance.DausNotes.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/create_first_note"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,7 +89,6 @@
     <!-- Add Note FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_note"
-        style="@style/Widget.DausNotes.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

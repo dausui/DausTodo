@@ -5,11 +5,8 @@ import com.dausnotes.app.data.database.PomodoroDao
 import com.dausnotes.app.data.model.PomodoroSession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PomodoroRepository @Inject constructor(
+class PomodoroRepository(
     private val pomodoroDao: PomodoroDao
 ) {
     

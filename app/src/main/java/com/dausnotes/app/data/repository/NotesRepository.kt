@@ -5,11 +5,8 @@ import com.dausnotes.app.data.database.NotesDao
 import com.dausnotes.app.data.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class NotesRepository @Inject constructor(
+class NotesRepository(
     private val notesDao: NotesDao
 ) {
     
